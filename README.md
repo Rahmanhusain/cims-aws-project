@@ -66,7 +66,7 @@ See [.env.example](.env.example) for required values:
 
 ## Follow-up Automation
 
-The follow-up service (`backend/services/followup.service.js`) queries for inquiries where `status = OPEN` and `created_at` is older than 48 hours, then sends reminder emails via SES. Wire this to a daily scheduler (e.g., CloudWatch Events or cron) that calls `runDailyFollowUp()`.
+The follow-up service (`backend/services/followup.service.js`) queries for inquiries where `status = OPEN` and `created_at` is older than 48 hours, then sends reminder emails via SES. Wire this to a daily scheduler (e.g., CloudWatch Events or cron or lambda functions) that calls `runDailyFollowUp()`.
 
 ## Resume-friendly Summary
 
