@@ -1,0 +1,10 @@
+{
+  "name": "followup-lambda",
+  "version": "1.0.0",
+  "description": "AWS Lambda function to trigger follow-up reminders via EventBridge",
+  "main": "followupHandler.js",
+  "scripts": {
+    "package": "zip -r followup-lambda.zip followupHandler.js package.json"
+  },
+  "dependencies": {}
+}

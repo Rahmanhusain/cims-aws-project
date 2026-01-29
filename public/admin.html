@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CIMS - Admin Panel</title>
+    <link rel="stylesheet" href="css/admin.css" />
+  </head>
+  <body>
+    <!-- Login Screen -->
+    <div id="login-container" class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <h1>CIMS</h1>
+          <p>Customer Inquiry Management System</p>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter username"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter password"
+              required
+            />
+          </div>
+          <div id="login-error" class="error-message"></div>
+          <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-container" class="admin-layout" style="display: none">
+      <!-- Header -->
+      <div class="admin-header">
+        <div class="header-left">
+          <h1>CIMS</h1>
+          <span>Admin Panel</span>
+        </div>
+        <div class="header-right">
+          <span id="welcome-text" class="welcome-text"></span>
+          <button id="change-password-btn" class="btn-secondary">
+            Change Password
+          </button>
+          <button id="logout-btn" class="btn-secondary">Logout</button>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="stats-section">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-total">0</div>
+          <div class="stat-label">Total Inquiries</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-open">0</div>
+          <div class="stat-label">Open</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-closed">0</div>
+          <div class="stat-label">Closed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-high">0</div>
+          <div class="stat-label">High Priority</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-medium">0</div>
+          <div class="stat-label">Medium Priority</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-low">0</div>
+          <div class="stat-label">Low Priority</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters-section">
+        <div class="filter-group">
+          <label for="filter-priority">Priority</label>
+          <select id="filter-priority" class="filter-select">
+            <option value="all">All</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filter-status">Status</label>
+          <select id="filter-status" class="filter-select">
+            <option value="all">All</option>
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="search-id">Search ID</label>
+          <input
+            type="text"
+            id="search-id"
+            class="search-input"
+            placeholder="Search by ID"
+          />
+        </div>
+        <div class="filter-actions">
+          <button id="search-btn" class="btn-search">Search</button>
+          <button id="clear-search-btn" class="btn-clear">Clear</button>
+        </div>
+      </div>
+
+      <div id="status" class="status-message"></div>
+
+      <!-- Table -->
+      <div class="table-section">
+        <table id="inquiries-table">
+          <thead>
+            <tr>
+              <th class="resizable">
+                ID
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Name
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Email
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Intent
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Sentiment
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Urgency
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Priority
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Status
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
+                Message
+                <div class="resizer"></div>
+              </th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="inquiry-body">
+            <tr>
+              <td colspan="10">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="password-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Change Password</h2>
+          <span class="close">&times;</span>
+        </div>
+        <form id="change-password-form">
+          <div class="form-group">
+            <label for="current-password">Current Password</label>
+            <input type="password" id="current-password" required />
+          </div>
+          <div class="form-group">
+            <label for="new-password">New Password</label>
+            <input type="password" id="new-password" required minlength="6" />
+          </div>
+          <div class="form-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input
+              type="password"
+              id="confirm-password"
+              required
+              minlength="6"
+            />
+          </div>
+          <div id="password-error" class="error-message"></div>
+          <div id="password-success" class="success-message"></div>
+          <button type="submit" class="btn-primary">Change Password</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+  </body>
+</html>
