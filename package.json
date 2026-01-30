@@ -1,7 +1,7 @@
 {
   "name": "customer-inquiry-manager",
   "version": "1.0.0",
-  "description": "Backend service for managing customer inquiries with AI analysis and email notifications.",
+  "description": "Backend service for managing customer inquiries with AI analysis and email notifications..",
   "main": "backend/server.js",
   "type": "module",
   "scripts": {

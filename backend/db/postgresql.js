@@ -21,7 +21,7 @@ const pool = new Pool({
   query_timeout: 30000,
 });
 
-// Handle pool errors
+// Handle pool errorss
 pool.on("error", (err, client) => {
   console.error("Unexpected error on idle client", err);
 });

@@ -42,7 +42,7 @@ router.post("/followup", verifyCronToken, async (req, res) => {
   }
 });
 
-// GET /api/cron/health - Health check for cron endpoint
+// GET /api/cron/health - Health check for cron endpoint.
 router.get("/health", (req, res) => {
   res.json({
     status: "healthy",

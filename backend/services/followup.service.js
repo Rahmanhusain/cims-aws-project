@@ -1,6 +1,6 @@
 import * as db from "../db/postgresql.js";
 import * as emailService from "./email.service.js";
-
+// Process inquiries that need follow-up reminders
 async function runDailyFollowUp() {
   try {
     const pending = await db.query(

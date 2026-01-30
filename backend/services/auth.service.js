@@ -102,7 +102,7 @@ export async function changeAdminPassword(username, oldPassword, newPassword) {
 }
 
 /**
- * Get dashboard statistics
+ * Get dashboard statistics.
  */
 export async function getDashboardStats() {
   try {

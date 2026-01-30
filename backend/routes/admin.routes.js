@@ -186,7 +186,7 @@ router.patch(
   },
 );
 
-// Legacy close endpoint (backwards compatibility)
+// Legacy close endpoint (backwards compatibility).
 router.patch(
   "/api/admin/inquiries/:id/close",
   requireAuth,

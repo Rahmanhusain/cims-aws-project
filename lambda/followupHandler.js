@@ -8,7 +8,7 @@ exports.handler = async (event) => {
 
   // Your API endpoint URL
   const apiUrl = process.env.API_URL || "https://your-domain.com";
-  const apiToken = process.env.API_SECRET_TOKEN; // Set this in Lambda environment variables
+  const apiToken = process.env.API_SECRET_TOKEN; // Set this in Lambda environment variabless
 
   const options = {
     hostname: new URL(apiUrl).hostname,

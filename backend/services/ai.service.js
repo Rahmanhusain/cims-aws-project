@@ -22,7 +22,7 @@ function parseJsonResponse(text) {
   try {
     if (!text) return null;
 
-    // Remove markdown code blocks if present
+    // Remove markdown code blocks if present.
     let cleanedText = text.trim();
     if (cleanedText.startsWith("```json")) {
       cleanedText = cleanedText

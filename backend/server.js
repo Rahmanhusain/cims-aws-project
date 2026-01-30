@@ -46,7 +46,7 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
-// Initialize admin table and default user
+// Initialize admin table and default user.
 initializeAdminTable().catch(console.error);
 
 app.listen(config.PORT, () => {

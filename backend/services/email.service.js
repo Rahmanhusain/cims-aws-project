@@ -59,6 +59,8 @@ async function sendAdminAlert(inquiry) {
   return sendEmail({ to: config.SMTP_USER, subject, body });
 }
 
+// Send follow-up reminder to customer
+
 async function sendFollowUpReminder(inquiry) {
   const subject = "Follow-up on your inquiry";
   const body = [

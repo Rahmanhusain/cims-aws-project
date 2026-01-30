@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 
 dotenv.config();
-
+// Validate required environment variables
 const requiredVars = [
   "PORT",
   "DB_HOST",

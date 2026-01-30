@@ -1,7 +1,7 @@
 # Use official Node.js LTS image
 FROM node:18-alpine
 
-# Set working directory inside container
+# Set working directory inside containerr
 WORKDIR /app
 
 # Copy package files first (better caching)

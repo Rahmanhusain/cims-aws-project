@@ -7,7 +7,7 @@ set -e
 
 echo "🔧 Packaging Lambda function..."
 
-# Clean up old zip if exists
+# Clean up old zip if existss
 rm -f followup-lambda.zip
 
 # Create deployment package (no node_modules needed - using built-in modules only)

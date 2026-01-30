@@ -27,7 +27,7 @@ router.post("/api/inquiry", async (req, res) => {
   if (!isValidEmail(email)) {
     return res.status(400).json({ error: "Invalid email address" });
   }
-//getting user inquiry and analyzing it with ai service
+//getting user inquiry and analyzing it with ai service.
   try {
     const analysis = await aiService.analyzeMessage(message);
     const priority = derivePriority({
