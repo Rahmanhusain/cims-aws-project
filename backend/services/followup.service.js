@@ -4,7 +4,7 @@ import * as emailService from "./email.service.js";
 async function runDailyFollowUp() {
   try {
     const pending = await db.query(
-      'SELECT id, name, email, message, intent, sentiment, urgency, priority, status, created_at FROM inquiries WHERE status = "OPEN" AND created_at < DATE_SUB(NOW(), INTERVAL 48 HOUR)',
+      "SELECT id, name, email, message, intent, sentiment, urgency, priority, status, created_at FROM inquiries WHERE status = 'OPEN' AND created_at < NOW() - INTERVAL '48 hours'",
     );
 
     for (const inquiry of pending) {

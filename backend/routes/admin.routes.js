@@ -113,7 +113,7 @@ router.get("/api/admin/stats", requireAuth, async (req, res) => {
 // Get all inquiries with filters
 router.get("/api/admin/inquiries", requireAuth, async (req, res) => {
   try {
-    const { priority, status, searchId } = req.query;
+    const { priority, status, searchId, sort } = req.query;
 
     let query =
       "SELECT id, name, email, message, intent, sentiment, urgency, priority, status, created_at FROM inquiries WHERE 1=1";
@@ -136,12 +136,15 @@ router.get("/api/admin/inquiries", requireAuth, async (req, res) => {
 
     // Filter by status
     if (status && status !== "all") {
+      const statusValue =
+        status === "in_progress" ? "IN_PROGRESS" : status.toUpperCase();
       query += ` AND status = $${paramCount}`;
-      params.push(status.toUpperCase());
+      params.push(statusValue);
       paramCount++;
     }
 
-    query += " ORDER BY created_at DESC";
+    const sortDirection = String(sort).toLowerCase() === "asc" ? "ASC" : "DESC";
+    query += ` ORDER BY created_at ${sortDirection}`;
 
     const rows = await db.query(query, params);
     return res.json(rows);
@@ -151,7 +154,39 @@ router.get("/api/admin/inquiries", requireAuth, async (req, res) => {
   }
 });
 
-// Close inquiry
+// Update inquiry status
+router.patch(
+  "/api/admin/inquiries/:id/status",
+  requireAuth,
+  async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Validate status
+    const validStatuses = ["OPEN", "IN_PROGRESS", "CLOSED"];
+    if (!status || !validStatuses.includes(status.toUpperCase())) {
+      return res.status(400).json({ error: "Invalid status" });
+    }
+
+    try {
+      const result = await db.query(
+        "UPDATE inquiries SET status = $1 WHERE id = $2 RETURNING id",
+        [status.toUpperCase(), id],
+      );
+
+      if (result.length === 0) {
+        return res.status(404).json({ error: "Inquiry not found" });
+      }
+
+      return res.json({ id: Number(id), status: status.toUpperCase() });
+    } catch (error) {
+      console.error("Failed to update inquiry", error);
+      return res.status(500).json({ error: "Failed to update inquiry" });
+    }
+  },
+);
+
+// Legacy close endpoint (backwards compatibility)
 router.patch(
   "/api/admin/inquiries/:id/close",
   requireAuth,

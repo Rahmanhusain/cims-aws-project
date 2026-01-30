@@ -303,6 +303,23 @@ body {
   gap: 8px;
 }
 
+.btn-sort {
+  padding: 8px 16px;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  height: 36px;
+}
+
+.btn-sort:hover {
+  background: #e0e0e0;
+}
+
 .btn-search {
   padding: 8px 16px;
   background: #667eea;
@@ -379,7 +396,6 @@ th {
   letter-spacing: 0.2px;
   font-size: 12px;
   position: relative;
-
 }
 
 th.resizable {
@@ -457,7 +473,58 @@ tr:last-child td {
   color: #2e7d32;
 }
 
-/* ============ ACTION BUTTONS ============ */
+/* ============ ACTION BUTTONS AND SELECTS ============ */
+.status-select {
+  padding: 6px 10px;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+  color: #374151;
+}
+
+.status-select:hover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+}
+
+.status-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-in-progress {
+  padding: 6px 12px;
+  background: #d97706;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-right: 5px;
+}
+
+.btn-in-progress:hover {
+  background: #c25004;
+}
+
+.btn-in-progress:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-in-progress:disabled:hover {
+  background: #d97706;
+}
+
 .btn-close {
   padding: 6px 12px;
   background: #0f766e;

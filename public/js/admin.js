@@ -14,6 +14,8 @@ const filterStatus = document.getElementById("filter-status");
 const searchId = document.getElementById("search-id");
 const searchBtn = document.getElementById("search-btn");
 const clearSearchBtn = document.getElementById("clear-search-btn");
+const dateSortBtn = document.getElementById("date-sort-btn");
+let dateSortDirection = "desc";
 
 // Password modal
 const changePasswordBtn = document.getElementById("change-password-btn");
@@ -146,6 +148,8 @@ async function loadDashboardStats() {
     const stats = await res.json();
     document.getElementById("stat-total").textContent = stats.total || 0;
     document.getElementById("stat-open").textContent = stats.open || 0;
+    document.getElementById("stat-inprogress").textContent =
+      stats.inProgress || 0;
     document.getElementById("stat-closed").textContent = stats.closed || 0;
     document.getElementById("stat-high").textContent = stats.highPriority || 0;
     document.getElementById("stat-medium").textContent =
@@ -170,7 +174,7 @@ function badge(text, type) {
 
 // Load inquiries with filters
 async function loadInquiries() {
-  tbody.innerHTML = '<tr><td colspan="10">Loading...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="11">Loading...</td></tr>';
 
   try {
     const priority = filterPriority.value;
@@ -181,6 +185,7 @@ async function loadInquiries() {
     if (priority && priority !== "all") params.append("priority", priority);
     if (status && status !== "all") params.append("status", status);
     if (id) params.append("searchId", id);
+    params.append("sort", dateSortDirection);
 
     const url = `/api/admin/inquiries${params.toString() ? "?" + params.toString() : ""}`;
 
@@ -208,7 +213,7 @@ async function loadInquiries() {
 
 function renderRows(inquiries) {
   if (!inquiries.length) {
-    tbody.innerHTML = '<tr><td colspan="10">No inquiries found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="11">No inquiries found.</td></tr>';
     return;
   }
 
@@ -225,13 +230,14 @@ function renderRows(inquiries) {
           <td>${inq.urgency || ""}</td>
           <td></td>
           <td></td>
+          <td>${formatDate(inq.created_at)}</td>
           <td class="message-cell">${inq.message || ""}</td>
           <td></td>
         `;
 
     const priorityCell = tr.children[6];
     const statusCell = tr.children[7];
-    const actionsCell = tr.children[9];
+    const actionsCell = tr.children[10];
 
     priorityCell.appendChild(
       badge(inq.priority || "LOW", (inq.priority || "low").toLowerCase()),
@@ -240,23 +246,31 @@ function renderRows(inquiries) {
       badge(inq.status || "OPEN", (inq.status || "open").toLowerCase()),
     );
 
-    const closeBtn = document.createElement("button");
-    closeBtn.textContent = "Mark Closed";
-    closeBtn.className = "btn-close";
-    closeBtn.disabled = (inq.status || "").toUpperCase() === "CLOSED";
-    closeBtn.addEventListener("click", () => closeInquiry(inq.id, closeBtn));
-    actionsCell.appendChild(closeBtn);
+    const statusSelect = document.createElement("select");
+    statusSelect.className = "status-select";
+    statusSelect.innerHTML = `
+      <option value="OPEN">Open</option>
+      <option value="IN_PROGRESS">In Progress</option>
+      <option value="CLOSED">Closed</option>
+    `;
+    statusSelect.value = inq.status || "OPEN";
+    statusSelect.addEventListener("change", (e) => {
+      updateInquiryStatus(inq.id, e.target.value, statusSelect);
+    });
+    actionsCell.appendChild(statusSelect);
 
     tbody.appendChild(tr);
   });
 }
 
-async function closeInquiry(id, button) {
-  button.disabled = true;
+async function updateInquiryStatus(id, newStatus, element) {
+  element.disabled = true;
   try {
-    const res = await fetch(`/api/admin/inquiries/${id}/close`, {
+    const res = await fetch(`/api/admin/inquiries/${id}/status`, {
       method: "PATCH",
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
+      body: JSON.stringify({ status: newStatus }),
     });
 
     if (!res.ok) {
@@ -264,15 +278,21 @@ async function closeInquiry(id, button) {
         showLoginScreen();
         return;
       }
-      throw new Error("Failed to close inquiry");
+      throw new Error(`Failed to update inquiry`);
     }
 
     await loadInquiries();
-    setStatus(`Inquiry ${id} closed.`);
+    loadDashboardStats();
+    setStatus(`Inquiry ${id} marked as ${newStatus.replace(/_/g, " ")}.`);
   } catch (error) {
-    setStatus(error.message || "Unable to close inquiry", "#b13030");
-    button.disabled = false;
+    setStatus(error.message || "Unable to update inquiry", "#b13030");
+    element.disabled = false;
   }
+}
+
+// Legacy function for backwards compatibility
+async function closeInquiry(id, button) {
+  return updateInquiryStatus(id, "CLOSED", button);
 }
 
 // Filter event listeners
@@ -286,6 +306,21 @@ clearSearchBtn.addEventListener("click", () => {
   searchId.value = "";
   loadInquiries();
 });
+
+// Date sort toggle
+dateSortBtn.addEventListener("click", () => {
+  dateSortDirection = dateSortDirection === "asc" ? "desc" : "asc";
+  dateSortBtn.textContent =
+    dateSortDirection === "asc" ? "Oldest First" : "Newest First";
+  loadInquiries();
+});
+
+function formatDate(value) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleString();
+}
 
 // Password modal handlers
 changePasswordBtn.addEventListener("click", () => {

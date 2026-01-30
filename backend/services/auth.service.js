@@ -121,6 +121,13 @@ export async function getDashboardStats() {
     );
     stats.open = parseInt(openResult[0].count);
 
+    // In Progress inquiries
+    const inProgressResult = await db.query(
+      "SELECT COUNT(*) as count FROM inquiries WHERE status = $1",
+      ["IN_PROGRESS"],
+    );
+    stats.inProgress = parseInt(inProgressResult[0].count);
+
     // Closed inquiries
     const closedResult = await db.query(
       "SELECT COUNT(*) as count FROM inquiries WHERE status = $1",

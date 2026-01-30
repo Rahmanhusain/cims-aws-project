@@ -69,6 +69,10 @@
           <div class="stat-label">Open</div>
         </div>
         <div class="stat-card">
+          <div class="stat-value" id="stat-inprogress">0</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
           <div class="stat-value" id="stat-closed">0</div>
           <div class="stat-label">Closed</div>
         </div>
@@ -102,6 +106,7 @@
           <select id="filter-status" class="filter-select">
             <option value="all">All</option>
             <option value="open">Open</option>
+            <option value="in_progress">In Progress</option>
             <option value="closed">Closed</option>
           </select>
         </div>
@@ -114,9 +119,19 @@
             placeholder="Search by ID"
           />
         </div>
+        <div class="filter-group">
+          <label for="date-sort-btn">Date</label>
+          <button id="date-sort-btn" class="btn-sort" type="button">
+            Newest First
+          </button>
+        </div>
         <div class="filter-actions">
-          <button id="search-btn" class="btn-search">Search</button>
-          <button id="clear-search-btn" class="btn-clear">Clear</button>
+          <button id="search-btn" class="btn-search" type="button">
+            Search
+          </button>
+          <button id="clear-search-btn" class="btn-clear" type="button">
+            Clear
+          </button>
         </div>
       </div>
 
@@ -160,6 +175,10 @@
                 <div class="resizer"></div>
               </th>
               <th class="resizable">
+                Date
+                <div class="resizer"></div>
+              </th>
+              <th class="resizable">
                 Message
                 <div class="resizer"></div>
               </th>
@@ -168,7 +187,7 @@
           </thead>
           <tbody id="inquiry-body">
             <tr>
-              <td colspan="10">Loading...</td>
+              <td colspan="11">Loading...</td>
             </tr>
           </tbody>
         </table>
